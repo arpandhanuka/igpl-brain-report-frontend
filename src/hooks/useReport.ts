@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import type { ReportMeta, PageData } from '../types/report'
 
 const BASE = 'http://95.216.145.196:3030/api'
+const HEADERS = { 'X-Api-Token': 'c37643207501d944d02e1e09e1eebb61e8da02807afd902a' }
 
 async function apiFetch<T>(url: string): Promise<T> {
-  const res = await fetch(url)
+  const res = await fetch(url, { headers: HEADERS })
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
   return res.json() as Promise<T>
 }
