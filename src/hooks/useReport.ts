@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { ReportMeta, PageData } from '../types/report'
 
-const BASE = '/api'
+const BASE = 'http://95.216.145.196:3030/api'
 
 async function apiFetch<T>(url: string): Promise<T> {
   const res = await fetch(url)
