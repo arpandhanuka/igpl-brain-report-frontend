@@ -1,5 +1,10 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "http://95.216.145.196:3030/api/:path*" }
-  ]
+    {
+      "source": "/api/:path*",
+      "destination": "http://95.216.145.196:3030/api/:path*"
+    }
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }

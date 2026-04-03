@@ -1,74 +1,87 @@
-import { StatusDot } from './StatusDot'
-import type { PageMeta } from '../types/report'
-import { PAGE_LABELS, PAGE_ORDER } from '../types/report'
+import { PAGES } from '../prompts'
 
 interface Props {
-  pages: PageMeta[]
-  currentPage: string
-  reportDate: string
-  onSelect: (pageId: string) => void
+  activePage: string
+  onSelect: (id: string) => void
 }
 
-const SIGNAL_PRIORITY: Record<string, number> = { act: 3, watch: 2, normal: 1 }
+const BRAND_TEAL = '#007C66'
+const BRAND_NAVY = '#0F2B4F'
 
-export function Sidebar({ pages, currentPage, reportDate, onSelect }: Props) {
-  const pageMap = Object.fromEntries(pages.map(p => [p.id, p]))
-
-  const sorted = PAGE_ORDER.filter(id => pageMap[id])
-
-  const generatedAt = pages[0]?.generated_at
-    ? new Date(pages[0].generated_at).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: false })
-    : null
-
+export function Sidebar({ activePage, onSelect }: Props) {
   return (
     <nav style={{
-      width: 220,
+      width: 200,
       minHeight: '100vh',
-      background: '#111827',
-      color: '#F9FAFB',
+      background: BRAND_NAVY,
       display: 'flex',
       flexDirection: 'column',
-      padding: '1.5rem 0',
+      padding: '0',
       flexShrink: 0,
+      boxShadow: '2px 0 12px rgba(0,0,0,0.3)',
     }}>
-      <div style={{ padding: '0 1rem 1rem', borderBottom: '1px solid #374151' }}>
-        <div style={{ fontSize: 11, color: '#9CA3AF', marginBottom: 4 }}>IGPL BRAIN</div>
-        <div style={{ fontSize: 13, fontWeight: 600 }}>{reportDate}</div>
-        {generatedAt && (
-          <div style={{ fontSize: 10, color: '#6B7280', marginTop: 2 }}>
-            generated {generatedAt}
-          </div>
-        )}
+      {/* Logo */}
+      <div style={{
+        padding: '1.5rem 1.25rem 1rem',
+        borderBottom: '1px solid rgba(255,255,255,0.08)',
+      }}>
+        <div style={{
+          fontWeight: 800,
+          fontSize: '1.05rem',
+          color: '#fff',
+          letterSpacing: '0.02em',
+        }}>IGPL Brain</div>
+        <div style={{
+          fontSize: '0.7rem',
+          color: BRAND_TEAL,
+          marginTop: 2,
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
+        }}>Live Intelligence</div>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0.5rem 0' }}>
-        {sorted.map(id => {
-          const page = pageMap[id]
-          const active = id === currentPage
+      {/* Nav items */}
+      <div style={{ flex: 1, padding: '0.75rem 0' }}>
+        {PAGES.map(page => {
+          const isActive = activePage === page.id
           return (
             <button
-              key={id}
-              onClick={() => onSelect(id)}
+              key={page.id}
+              onClick={() => onSelect(page.id)}
               style={{
+                width: '100%',
+                textAlign: 'left',
+                background: isActive
+                  ? `linear-gradient(90deg, ${BRAND_TEAL}22 0%, transparent 100%)`
+                  : 'transparent',
+                border: 'none',
+                borderLeft: isActive ? `3px solid ${BRAND_TEAL}` : '3px solid transparent',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.55)',
+                padding: '0.6rem 1.25rem',
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+                fontWeight: isActive ? 600 : 400,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                width: '100%',
-                padding: '0.6rem 1rem',
-                background: active ? '#1F2937' : 'transparent',
-                border: 'none',
-                color: active ? '#F9FAFB' : '#D1D5DB',
-                cursor: 'pointer',
-                fontSize: 13,
-                textAlign: 'left',
-                borderLeft: active ? '2px solid #3B82F6' : '2px solid transparent',
+                gap: '0.6rem',
+                transition: 'all 0.15s ease',
               }}
             >
-              <StatusDot signal={page?.signal_class ?? null} size={8} />
-              {PAGE_LABELS[id] ?? id}
+              <span style={{ fontSize: '1rem' }}>{page.icon}</span>
+              {page.label}
             </button>
           )
         })}
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        padding: '1rem 1.25rem',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
+        fontSize: '0.65rem',
+        color: 'rgba(255,255,255,0.25)',
+      }}>
+        IG Petrochemicals Ltd
       </div>
     </nav>
   )

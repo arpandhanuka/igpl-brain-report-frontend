@@ -5,6 +5,8 @@ export interface PageMeta {
   signal_class: SignalClass
   generated_at: string
   has_charts?: boolean
+  top_intelligence_class?: string // 'critical', 'important', 'watchlist'
+  max_intelligence_urgency?: string // 'immediate', 'this_week', 'monitor'
 }
 
 export interface ReportMeta {
@@ -24,6 +26,8 @@ export interface PageData {
   page_id: string
   signal_class: SignalClass
   generated_at: string
+  top_intelligence_class?: string
+  max_intelligence_urgency?: string
   sections: Record<string, { narrative?: string; [key: string]: unknown }>
   charts: ChartRef[]
 }
